@@ -1,0 +1,183 @@
+// -*- mode: jsonc -*-
+{
+    // "layer": "top", // Waybar at top layer
+    // "position": "bottom", // Waybar position (top|bottom|left|right)
+    "height": 27, // Waybar height (to be removed for auto height)
+    "width": 1590, // Waybar width
+    "spacing": 2, // Gaps between modules (4px)
+    "margin-top": 5,
+    // Choose the order of the modules
+    "modules-left": [
+	"custom/logo",
+        "hyprland/workspaces"
+        //"sway/mode",
+        //"sway/scratchpad",
+        //"custom/media"
+    ],
+    "modules-center": [
+        "temperature",
+	"memory",
+	"cpu"
+    ],
+    "modules-right": [
+	//"mpd",
+        //"idle_inhibitor",
+	"nm-applet",
+	"tray",
+        "hyprland/language",
+	"bluetooth",
+	"network",
+	//"pulseaudio",
+	"pulseaudio#input",
+	"pulseaudio#output",
+        //"power-profiles-daemon",
+        "backlight",
+        //"keyboard-state",
+        //"hyprland/language",
+        "battery",
+        //"battery#bat2",
+        "clock"
+    ],
+    "custom/logo": {
+	"format": "󰣇 ",
+	"tooltip":false
+    },
+    // Modules configuration
+    "hyprland/workspaces": {
+         "disable-scroll": false,
+	 //"on-click": "activate", //вместо курсора появляется рука
+         "format": "{icon}",
+         "format-icons": {
+             "1": "1",
+             "2": "2",
+             "3": "3",
+             "4": "4",
+             "5": "5",
+	     "6": "6",
+	     "7": "7"
+         },
+	 "tooltip":false, // всплывающая подсказка
+	 "persistent-workspaces": {
+		"*":7
+	 }
+     },
+    "keyboard-state": {
+        "numlock": true,
+        "capslock": true,
+        "format": "{name} {icon}",
+        "format-icons": {
+            "locked": "",
+            "unlocked": ""
+        }
+    },
+    "tray": {
+        // "icon-size": 21,
+        "spacing": 10
+    },
+    "clock": {
+        "timezone": "Europe/Moscow",
+        //"tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
+        "tooltip-format": "{:%d.%m.%Y}"
+	//"format-alt": "{:%Y-%m-%d}"
+    },
+    "cpu": {
+        "format": " {usage}%",
+        "tooltip": false
+    },
+    "memory": {
+    "interval": 30,
+    "format": " {used:0.1f}G"
+    },
+    "temperature": {
+        //"thermal-zone": 2,
+        "hwmon-path": "/sys/class/hwmon/hwmon2/temp1_input",
+        "critical-threshold": 80,
+        // "format-critical": "{temperatureC}°C {icon}",
+        "format": "{icon} {temperatureC}°C",
+        "format-icons": ["", "", ""]
+    },
+    "backlight": {
+        // "device": "acpi_video1",
+        "format": " {percent}%" // {icon}, "
+        //"format-icons": ["", "", "", "", "", "", "", "", ""]
+    },
+    "battery": {
+        "states": {
+            // "good": 95
+            "warning": 30,
+            "critical": 15
+        },
+        "format": "{icon} {capacity}%",
+        "format-full": "{capacity}% {icon}",
+        "format-charging": "{capacity}% ",
+        "format-plugged": "{capacity}% ",
+        "tooltip-format": "{time}",
+	//"format-alt": "{time} {icon}",
+        // "format-good": "", // An empty format will hide the module
+        // "format-full": "",
+        "format-icons": ["", "", "", "", ""]
+    },
+    "power-profiles-daemon": {
+      "format": "{icon}",
+      "tooltip-format": "Power profile: {profile}\nDriver: {driver}",
+      "tooltip": true,
+      "format-icons": {
+        "default": "",
+        "performance": "",
+        "balanced": "",
+        "power-saver": ""
+      }
+    },
+    "network": {
+        // "interface": "wlp2*", // (Optional) To force the use of this interface
+        //"format-wifi": "{essid} ({signalStrength}%) ",
+        "format-wifi": "󰖩 ", //{signalStrength}%",
+	"format-disconnected": "󰖪 ",
+	"format-ethernet": "{ipaddr}/{cidr} ",
+        //"tooltip-format": "{ifname} via {gwaddr} ",
+        "format-linked": "{ifname} (No IP) ",
+        //"format-alt": "{ifname}: {ipaddr}/{cidr}"    
+	"tooltip-format": "{essid}",
+	"on-click": "nm-connection-editor"
+    },
+    "bluetooth": {
+	"format": "",
+	"format-disabled": "󰂲",
+	"format-connected": "",
+	"tooltip-format": "{controller_address}",
+	"tooltip-format-connected": "{device_alias}",
+	"tooltip-format-enumerate-connected": "{device_alias}",
+	"on-click": "blueman-manager"
+    },
+    "pulseaudio#input": {
+	"format-source": " {volume}%",
+	"format-source-muted": " off",
+	"format": "{format_source}",
+	"max-volume": 100,
+	"scroll-step": 5,
+	"smooth-scrolling-threshold": 1,
+	"on-click": "pavucontrol",
+	//"on-click": "amixer sset 'Capture' toggle",
+	//"on-click-middle": "pavucontrol",
+	"on-scroll-up": "pactl set-source-volume @DEFAULT_SOURCE@ +5%",
+	"on-scroll-down": "pactl set-source-volume @DEFAULT_SOURCE@ -5%"
+    },
+    "pulseaudio#output": {
+	"format": "{icon} {volume}%",
+	"format-muted": " off",
+	"format-icons": {
+		"default": ["", "", ""]
+	},
+	"max-volume": 100,
+	"scroll-step": 2,
+	"smooth-scrolling-threshold": 1,
+	"on-click": "pavucontrol"
+	//"on-click": "amixer sset 'Master' toggle",
+	//"on-click-middle": "pavucontrol"
+    },
+    "hyprland/language": {
+        "format": "{short} {variant}"
+    }
+// "exec": "$HOME/.config/waybar/mediaplayer.py --player spotify 2> /dev/null" // Filter player based on name
+    }
+}

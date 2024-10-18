@@ -1,0 +1,107 @@
+call plug#begin()
+
+Plug 'morhetz/gruvbox'
+
+Plug 'mfussenegger/nvim-dap'
+Plug 'nvim-neotest/nvim-nio'
+Plug 'rcarriga/nvim-dap-ui'
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+Plug 'theHamsta/nvim-dap-virtual-text'
+
+"Plug 'puremourning/vimspector'
+
+call plug#end()
+
+set number
+colorscheme gruvbox
+set background=dark
+let g:vimspector_enable_mappings = 'HUMAN'
+"packadd! vimspector
+
+lua << EOF
+require("dapui").setup() -- Убедитесь, что `dapui` инициализирован перед `dap`
+
+local dap = require("dap")
+
+-- Настройки для `dapui`
+dap.listeners.before.attach = function(config)
+  dapui.open()
+end
+dap.listeners.before.launch = function(config)
+  dapui.open()
+end
+
+-- Настройки для `dapui` (отключение)
+dap.listeners.after.event_terminated = function(config)
+  dapui.close()
+end
+dap.listeners.after.event_exited = function(config)
+  dapui.close()
+end
+
+dap.adapters.gdb = {
+  type = "executable",
+  command = "gdb",
+  args = { "--interpreter=dap", "--eval-command", "set print pretty on" },
+  -- Добавить настройки для `dapui` в `dap.adapters`
+  --dapui = {
+  -- open = true,
+  -- close = true
+  --}
+}
+
+dap.configurations.c = {
+  {
+    name = "Launch",
+    type = "gdb",
+    request = "launch",
+    program = function()
+      return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
+    end,
+    cwd = "${workspaceFolder}",
+    stopAtBeginningOfMainSubprogram = false,
+  },
+  {
+    name = "Select and attach to process",
+    type = "gdb",
+    request = "attach",
+    program = function()
+       return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
+    end,
+    pid = function()
+       local name = vim.fn.input('Executable name (filter): ')
+       return require("dap.utils").pick_process({ filter = name })
+    end,
+    cwd = '${workspaceFolder}'
+  },
+  {
+    name = 'Attach to gdbserver :1234',
+    type = 'gdb',
+    request = 'attach',
+    target = 'localhost:1234',
+    program = function()
+       return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
+    end,
+    cwd = '${workspaceFolder}'
+  },
+}
+
+-- dap-ui and dap-text Configuration
+-- dapui.open_on_start = false -- Automatically open dap-ui on start (set to true if desired)
+-- dap.ui.column = 'right'        -- Column for the dap-ui, either "left" or "right"
+-- dap.ui.max_height = 0.8       -- Maximum height for the dap-ui (in percentage of the terminal height)
+--dap.ui.max_width = 0.3        -- Maximum width for the dap-ui (in percentage of the terminal width)
+
+-- dap-text configuration
+-- dap.text.open_on_start = false -- Automatically open dap-text on start (set to true if desired)
+-- dap.text.column = 'right'    -- Column for the dap-text, either "left" or "right"
+-- dap.text.max_height = 0.8   -- Maximum height for the dap-text (in percentage of the terminal height)
+-- dap.text.max_width = 0.3    -- Maximum width for the dap-text (in percentage of the terminal width)
+
+-- Custom keybindings (Optional)
+vim.api.nvim_set_keymap('n', 'F5', ':lua require("dap").continue()<CR>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<leader>rs', ':lua require("dap").step_over()<CR>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<leader>ri', ':lua require("dap").step_into()<CR>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<leader>ro', ':lua require("dap").step_out()<CR>', { noremap = true, silent = true })
+
+EOF

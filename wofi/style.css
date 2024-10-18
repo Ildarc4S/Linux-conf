@@ -1,0 +1,51 @@
+* { 
+   /*font-family: JetBrainsMono;*/
+   font-family: FontAwesome, Roboto, Arial, sans-serif;
+   font-size:13px;
+}
+
+@define-color bg rgba(39, 42, 52, 1.0);
+window {
+    background-color: @bg; 
+    border-radius: 5px;
+
+}
+
+#input {
+   margin: 5px 0px 5px 0px;
+   padding: 0px;
+   border-radius: 5px;
+   border: none;
+}
+
+#inner-box {
+   padding: 5px 0px 0px 0px;
+   background-color: @bg;
+}
+
+#outer-box {
+   margin: 5px;
+   padding: 0px;
+   background-color: @bg;
+}
+
+#text {
+   padding: 5 0 5 0px;
+   margin: 5 0 5 0px; 
+}
+
+#entry {
+   margin: 0 0 0 0 px;
+   padding: 0 1 0 2px;
+   border-radius: 5px;
+}
+
+#entry: nth-child(even) {
+   padding: 0 1px;
+}
+
+#entry:selected {
+   border-radius: 5px;
+   background-color: #2f407a;
+}
+

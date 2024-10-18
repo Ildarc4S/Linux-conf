@@ -1,0 +1,43 @@
+# Take a look at the mako manpage with the command:
+#   man 5 mako
+# To view all configuration options.
+
+#Body
+#font=Cozette 11
+format=<b>%s</b>\n%b
+
+#Global
+sort=-time
+layer=overlay
+
+max-visible=9
+font=Awesome 11
+background-color=#272a34
+width=200
+height=110
+margin=5
+padding=0,5,10
+border-radius=5
+border-size=1
+max-icon-size=36
+default-timeout=5000
+ignore-timeout=1
+anchor=top-right
+icon-location=left
+icon-path=~/.icons/Papirus-Dark
+
+[urgency=low]
+border-color=#75b4fa
+default-timeout=2500
+
+[urgency=normal]
+border-color=#75facd
+default-timeout=3000
+
+[urgency=critical]
+border-color=#ea3f3e
+default-timeout=0
+
+[app-name=Telegram]
+border-color=#75b4fa
+#group-by=app-name
